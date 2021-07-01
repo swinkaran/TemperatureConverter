@@ -1,8 +1,36 @@
-<p>Temperature converter</p>
+<div style="width: 400px;" class='card'>
+    <div class='card-header'>
+        {{pageTitle}}
+    </div>
 
-<div class='card-body'>
-    <p>Number of metrics : {{temperatures.length}}</p>
-<div class='table-responsive'>
+    <div class="form-group">
+        <label class="h3" for="usr">Temperature</label>
+        <input type="text" class="form-control" id="usr" [(ngModel)]='temperatureInput' />
+    </div>
+    
+    <h3>Convert From </h3>
+    
+    <select class="form-control" [(ngModel)]="selectedFromOption">   
+        <option *ngFor="let temp of temperatures" [value]="temp.temperatureType">
+            {{temp.temperatureType}}
+        </option>   
+    </select>
+
+    <br/>
+    <h3>Convert To </h3>
+    <select  class="form-control" [(ngModel)]="selectedToOption">   
+        <option *ngFor="let temp of temperatures" [value]="temp.temperatureType">
+            {{temp.temperatureType}}
+        </option>   
+    </select>
+
+    <br/>
+    <button type="button" class="btn btn-info" (click)='convertMetric()'>Convert</button>
+    <br/>
+    <label class="h3" for="usr">{{temperatureOutput}}</label>
+    <br/><br/>
+
+    <div class='table-responsive'>
     <table class='table table-striped'
            *ngIf='temperatures.length'>
       <thead class="thead-dark">
@@ -18,7 +46,6 @@
           </td>
           <td style="text-align: right;">{{ t1.temperatureValue }}</td>
           
-          <td><button type="button" class="btn btn-info">+</button></td>
         </tr>
       </tbody>
     </table>
