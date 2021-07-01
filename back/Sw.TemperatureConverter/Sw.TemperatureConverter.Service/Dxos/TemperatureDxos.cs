@@ -2,43 +2,60 @@
 using Sw.TemperatureConverter.DomainModels.Models;
 using Sw.TemperatureConverter.ServiceDxos.Interfaces;
 using Sw.TemperatureConverter.ServiceModel.Dtos;
-using System.Collections.Generic;
 
 namespace Sw.TemperatureConverter.ServiceDxos
 {
     public class TemperatureDxos : ITemperatureDxos
     {
-        private readonly IMapper _mapper;
-        
+        private readonly IMapper _celsiusMapper;
+        private readonly IMapper _fahrenheitMapper;
+        private readonly IMapper _kelvinMapper;
 
         public TemperatureDxos()
         {
-            var confiig = CreateMappings();
-            _mapper = confiig.CreateMapper();
-        
+            _celsiusMapper = CreateCelsiusMappings().CreateMapper();
+            _fahrenheitMapper = CreateFahrenheitMappings().CreateMapper();
+            _kelvinMapper = CreateKelvinMappings().CreateMapper();
         }
 
-        public MapperConfiguration CreateMappings()
+        private MapperConfiguration CreateCelsiusMappings()
         {
             return new MapperConfiguration(cfg =>
             {
-                //cfg.CreateMap<VProduct, TemperatureDto>()
-                //    .ForMember(dst => dst.ProductId, opt => opt.MapFrom(src => src.productId))
-                //    .ForMember(dst => dst.Description, opt => opt.MapFrom(src => src.Description.Replace("\r\n", "")))
-                //    .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
-                //    .ForMember(dst => dst.UnitPrice, opt => opt.MapFrom(src => GetUnitPriceWithMargin(src.unitPrice)))
-                //    .ForMember(dst => dst.MaximumQuantity, opt => opt.MapFrom(src => src.MaximumQuantity));
+                cfg.CreateMap<Temperature, TemperatureDto>()
+                .ForMember(dst => dst.TemperatureType, opt => opt.Ignore())
+                .ForMember(dst => dst.TemperatureValue, opt => opt.MapFrom(src => src.ConvertToC()))
+                .AfterMap((Temperature, dst) => { dst.TemperatureType = "Celsius"; });
+            });
+        }
+        private MapperConfiguration CreateFahrenheitMappings()
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Temperature, TemperatureDto>()
+                .ForMember(dst => dst.TemperatureType, opt => opt.Ignore())
+                .ForMember(dst => dst.TemperatureValue, opt => opt.MapFrom(src => src.ConvertToF()))
+                .AfterMap((Temperature, dst) => { dst.TemperatureType = "Fahrenheit"; });
+            });
+        }
+        private MapperConfiguration CreateKelvinMappings()
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Temperature, TemperatureDto>()
+                .ForMember(dst => dst.TemperatureType, opt => opt.Ignore())
+                .ForMember(dst => dst.TemperatureValue, opt => opt.MapFrom(src => src.ConvertToK()))
+                .AfterMap((Temperature, dst) => { dst.TemperatureType = "Kelvin"; });
             });
         }
 
-        public IList<TemperatureDto> MapTemperatureDtos(IList<Temperature> products)
-        {
-            return _mapper.Map<IList<Temperature>, IList<TemperatureDto>>(products);
-        }
+        public TemperatureDto MapTemperatureToCelsiusDto(Temperature temperature)
+            => _celsiusMapper.Map<Temperature, TemperatureDto>(temperature);
 
-        TemperatureDto ITemperatureDxos.MapTemperatureDto(Temperature Product)
-        {
-            throw new System.NotImplementedException();
-        }
+        public TemperatureDto MapTemperatureToFahrenheitDto(Temperature temperature)
+            => _fahrenheitMapper.Map<Temperature, TemperatureDto>(temperature);
+
+        public TemperatureDto MapTemperatureToKelvinDto(Temperature temperature)
+            => _kelvinMapper.Map<Temperature, TemperatureDto>(temperature);
     }
 }

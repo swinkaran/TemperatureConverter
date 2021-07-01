@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Sw.TemperatureConverter.DomainModels;
 using Sw.TemperatureConverter.DomainModels.Models;
 using Sw.TemperatureConverter.ServiceDxos.Interfaces;
 using Sw.TemperatureConverter.ServiceModel.Dtos;
@@ -18,8 +17,6 @@ namespace Sw.TemperatureConverter.ServiceProduct
         public GetTemperaturesByTypeHandler(ITemperatureDxos ProductDxos)
         {
             _temperatureDxos = ProductDxos ?? throw new ArgumentNullException(nameof(ProductDxos));
-
-            // _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<IList<TemperatureDto>> Handle(GetTemperaturesByTypeQuery request, CancellationToken cancellationToken)
@@ -32,7 +29,7 @@ namespace Sw.TemperatureConverter.ServiceProduct
 
             try
             {
-                if (type.Equals(nameof(DomainModels.Models.Celsius).ToLower()))
+                if (type.Equals(nameof(Celsius).ToLower()))
                 {
                     metric = new Celsius(value);
                 }
@@ -40,16 +37,19 @@ namespace Sw.TemperatureConverter.ServiceProduct
                 {
                     metric = new Fahrenheit(value);
                 }
-                else
+                else if (type.Equals(nameof(Kelvin).ToLower()))
                 {
                     metric = new Kelvin(value);
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException("Invalid temperature type in parameter");
                 }
 
                 var temperatures = GetTemperature(metric);
                 if (temperatures != null)
                 {
                     return temperatures;
-                    // return _temperatureDxos.MapTemperatureDto(temperature);
                 }
             }
             catch (Exception e)
@@ -63,9 +63,9 @@ namespace Sw.TemperatureConverter.ServiceProduct
         private IList<TemperatureDto> GetTemperature(Temperature metric)
         {
             return new List<TemperatureDto> {
-                new TemperatureDto { TemperatureType="Celcius", TemperatureValue= metric.ConvertToC() },
-                new TemperatureDto { TemperatureType="Fahrenheit", TemperatureValue= metric.ConvertToF() },
-                new TemperatureDto { TemperatureType="Kelvin", TemperatureValue= metric.ConvertToK() }
+                _temperatureDxos.MapTemperatureToCelsiusDto(metric),
+                _temperatureDxos.MapTemperatureToFahrenheitDto(metric),
+                _temperatureDxos.MapTemperatureToKelvinDto(metric)
             };
         }
     }

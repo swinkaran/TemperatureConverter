@@ -42,6 +42,5 @@ namespace Sw.TemperatureConverter.UnitTests.Categories.Queries
             result.ShouldNotBeNull();
             result.Count.ShouldBeEquivalentTo(3);
         }
-
     }
 }
