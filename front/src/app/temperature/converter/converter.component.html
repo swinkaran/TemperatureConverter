@@ -1,0 +1,26 @@
+<p>Temperature converter</p>
+
+<div class='card-body'>
+    <p>Number of metrics : {{temperatures.length}}</p>
+<div class='table-responsive'>
+    <table class='table table-striped'
+           *ngIf='temperatures.length'>
+      <thead class="thead-dark">
+        <tr>
+          <th>Temperature Metric : </th>
+          <th>Temperature</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor='let t1 of temperatures'>
+          <td style="text-align: left;">
+              {{ t1.temperatureType }}
+          </td>
+          <td style="text-align: right;">{{ t1.temperatureValue }}</td>
+          
+          <td><button type="button" class="btn btn-info">+</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>

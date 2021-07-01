@@ -1,0 +1,17 @@
+[
+  {
+    "temperatureId":"1",
+    "temperatureType": "Celsius",
+    "temperatureValue": 1
+  },
+  {
+    "temperatureId":"2",
+    "temperatureType": "fahrenheit",
+    "temperatureValue": 2
+  },
+  {
+    "temperatureId":"3",
+    "temperatureType": "kelvin",
+    "temperatureValue": 3
+  }
+]
