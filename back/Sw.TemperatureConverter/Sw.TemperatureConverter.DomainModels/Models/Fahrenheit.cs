@@ -25,7 +25,7 @@ namespace Sw.TemperatureConverter.DomainModels.Models
 
         public override double ConvertToK()
         {
-            return 0.00;
+            return (ConvertToC() + 273.15);
         }
     }
 }

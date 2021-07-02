@@ -42,5 +42,27 @@ namespace Sw.TemperatureConverter.UnitTests.Categories.Queries
             result.ShouldNotBeNull();
             result.Count.ShouldBeEquivalentTo(3);
         }
+
+        [Fact]
+        public async Task Passing_Fahrenheit_Should_Return_Correct_Temperature_Metrics()
+        {
+            var handler = new GetTemperaturesByTypeHandler(_temperatureDxos);
+            var result = await handler.Handle(new GetTemperaturesByTypeQuery("Fahrenheit",53), CancellationToken.None);
+
+            result.ShouldBeOfType<List<TemperatureDto>>();
+            result.ShouldNotBeNull();
+            result.Count.ShouldBeEquivalentTo(3);
+        }
+
+        [Fact]
+        public async Task Passing_Kelvin_Should_Return_Correct_Temperature_Metrics()
+        {
+            var handler = new GetTemperaturesByTypeHandler(_temperatureDxos);
+            var result = await handler.Handle(new GetTemperaturesByTypeQuery("Kelvin", 298), CancellationToken.None);
+
+            result.ShouldBeOfType<List<TemperatureDto>>();
+            result.ShouldNotBeNull();
+            result.Count.ShouldBeEquivalentTo(3);
+        }
     }
 }

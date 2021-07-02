@@ -15,17 +15,17 @@ namespace Sw.TemperatureConverter.DomainModels.Models
 
         public override double ConvertToC()
         {
-            throw new NotImplementedException();
+            return kelvin - 273.15;
         }
 
         public override double ConvertToF()
         {
-            throw new NotImplementedException();
+            return (ConvertToC() * 9) / 5 + 32;
         }
 
         public override double ConvertToK()
         {
-            return kelvin * 1;
+            return kelvin;
         }
     }
 }
