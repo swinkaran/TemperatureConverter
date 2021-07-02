@@ -2,6 +2,7 @@
 using Sw.TemperatureConverter.DomainModels.Models;
 using Sw.TemperatureConverter.ServiceDxos.Interfaces;
 using Sw.TemperatureConverter.ServiceModel.Dtos;
+using System;
 
 namespace Sw.TemperatureConverter.ServiceDxos
 {
@@ -24,7 +25,7 @@ namespace Sw.TemperatureConverter.ServiceDxos
             {
                 cfg.CreateMap<Temperature, TemperatureDto>()
                 .ForMember(dst => dst.TemperatureType, opt => opt.Ignore())
-                .ForMember(dst => dst.TemperatureValue, opt => opt.MapFrom(src => src.ConvertToC()))
+                .ForMember(dst => dst.TemperatureValue, opt => opt.MapFrom(src => Math.Round(src.ConvertToC(), 2)))
                 .AfterMap((Temperature, dst) => { dst.TemperatureType = "Celsius"; });
             });
         }
@@ -34,7 +35,7 @@ namespace Sw.TemperatureConverter.ServiceDxos
             {
                 cfg.CreateMap<Temperature, TemperatureDto>()
                 .ForMember(dst => dst.TemperatureType, opt => opt.Ignore())
-                .ForMember(dst => dst.TemperatureValue, opt => opt.MapFrom(src => src.ConvertToF()))
+                .ForMember(dst => dst.TemperatureValue, opt => opt.MapFrom(src => Math.Round(src.ConvertToF(), 2)))
                 .AfterMap((Temperature, dst) => { dst.TemperatureType = "Fahrenheit"; });
             });
         }
@@ -44,7 +45,7 @@ namespace Sw.TemperatureConverter.ServiceDxos
             {
                 cfg.CreateMap<Temperature, TemperatureDto>()
                 .ForMember(dst => dst.TemperatureType, opt => opt.Ignore())
-                .ForMember(dst => dst.TemperatureValue, opt => opt.MapFrom(src => src.ConvertToK()))
+                .ForMember(dst => dst.TemperatureValue, opt => opt.MapFrom(src => Math.Round(src.ConvertToK(), 2)))
                 .AfterMap((Temperature, dst) => { dst.TemperatureType = "Kelvin"; });
             });
         }
