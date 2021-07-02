@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ITemperature } from '../temperature';
 import { TemperatureService } from '../temperatureService';
@@ -14,14 +13,14 @@ export class ConverterComponent implements OnInit {
   sub!: Subscription;  
   errorMessage = '';
   temperatures: ITemperature[] = [];  
+  
   selectedFromOption: string = 'Celsius';
   selectedToOption: string = 'Celsius';
-  temperatureInput:string='';
-  temperatureOutput:string='';
+  temperatureInput:number = 0;
+  temperatureOutput:string ='';
 
-  modifiedText:string='';
-
-  constructor(private temperatureService: TemperatureService) { }
+  constructor(private temperatureService: TemperatureService) { 
+  }
 
   ngOnInit(): void {
     console.log('reading the data');
@@ -34,6 +33,7 @@ export class ConverterComponent implements OnInit {
       error: err  => this.errorMessage = err
     });
 
+    
     this.temperatures.forEach(function (value) {
       console.log(value['temperatureType']);
 
@@ -47,21 +47,13 @@ export class ConverterComponent implements OnInit {
   
   convertMetric()
   {
-    console.log('Converting '+ this.temperatureInput +' from ' + this.selectedFromOption + ' to ' + this.selectedToOption + ' ');
-    //call api
-    //this.customFunction(val);
-    
-  }
-
-  onTemperatureSElected(val : any)
-  {
-    //call api
-    this.customFunction(val);
-    
-  }
-
-  customFunction(val: any)
-  {
-    this.modifiedText = 'The value seleced is '+ val + '';
+    this.sub = this.temperatureService.gettemperatureByMetric(this.selectedFromOption, this.temperatureInput).subscribe({
+      next: resp => {
+        this.temperatureOutput = ''+ this.temperatureInput + ' ' + this.selectedFromOption + ' = ' 
+        + resp?.find(a => a.temperatureType.toLocaleLowerCase() == this.selectedToOption.toLowerCase())?.temperatureValue 
+        + ' ' +this.selectedToOption
+      },
+      error: err  => this.errorMessage = err
+    });
   }
 }

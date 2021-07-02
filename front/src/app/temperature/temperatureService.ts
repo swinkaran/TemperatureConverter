@@ -8,7 +8,7 @@ import { ITemperature } from './temperature';
     providedIn: 'root'
   })
   export class TemperatureService {
-    private temperatureUrl = 'api/products/products.json';
+    private temperatureUrl = 'https://localhost:44353/api/temperature/Celsius/5';
   
     constructor(private http: HttpClient) { }
   
@@ -28,7 +28,18 @@ import { ITemperature } from './temperature';
           map((temperatures: ITemperature[]) => temperatures.find(p => p.temperatureId === id))
         );
     }
-  
+
+    // Get one temperature
+    gettemperatureByMetric(metric: string, value : number ): Observable<ITemperature[] | undefined> {
+        const url = `https://localhost:44353/api/temperature/${metric}/${value}`;
+        console.log("look for url : " + url)
+        return this.http.get<ITemperature[]>(url)
+          .pipe(
+            tap(data => console.log('All: ', JSON.stringify(data))),
+            catchError(this.handleError)
+          );
+      }
+
     private handleError(err: HttpErrorResponse): Observable<never> {
       let errorMessage = '';
       if (err.error instanceof ErrorEvent) {
