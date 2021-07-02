@@ -37,6 +37,7 @@ namespace Sw.TemperatureConverter.Api
             //Add MediatR
             var assembly = AppDomain.CurrentDomain.Load("Sw.TemperatureConverter.Service");
             services.AddMediatR(assembly);
+
             services.AddCors();
         }
 
@@ -52,12 +53,20 @@ namespace Sw.TemperatureConverter.Api
 
             app.UseRouting();
 
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
 
 
            // app.UseMvc(routes => { routes.MapRoute(name: "towIds", template: "" )});
