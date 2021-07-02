@@ -8,10 +8,6 @@ namespace Sw.TemperatureConverter.UnitTests.Mocks
     {
         public static void GetMockRepository()
         {
-
-
-         
-
         }
     }
 }
