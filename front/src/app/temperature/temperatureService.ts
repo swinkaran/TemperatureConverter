@@ -8,7 +8,7 @@ import { ITemperature } from './temperature';
     providedIn: 'root'
   })
   export class TemperatureService {
-    private temperatureUrl = 'https://localhost:44353/api/temperature/Celsius/5';
+    private temperatureUrl = 'https://swintempconvapi.azurewebsites.net/api/temperature/Celsius/1';
   
     constructor(private http: HttpClient) { }
   
@@ -31,7 +31,7 @@ import { ITemperature } from './temperature';
 
     // Get one temperature
     gettemperatureByMetric(metric: string, value : number ): Observable<ITemperature[] | undefined> {
-        const url = `https://localhost:44353/api/temperature/${metric}/${value}`;
+        const url = `https://swintempconvapi.azurewebsites.net/api/temperature/${metric}/${value}`;
         console.log("look for url : " + url)
         return this.http.get<ITemperature[]>(url)
           .pipe(
