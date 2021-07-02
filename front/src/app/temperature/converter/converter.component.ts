@@ -9,7 +9,7 @@ import { TemperatureService } from '../temperatureService';
   styleUrls: ['./converter.component.css']
 })
 export class ConverterComponent implements OnInit {
-  pageTitle: string = 'Temperature converter';
+  pageTitle: string = 'Temperature Converter Application';
   sub!: Subscription;  
   errorMessage = '';
   temperatures: ITemperature[] = [];  
