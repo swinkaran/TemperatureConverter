@@ -33,7 +33,6 @@ export class ConverterComponent implements OnInit {
       error: err  => this.errorMessage = err
     });
 
-    
     this.temperatures.forEach(function (value) {
       console.log(value['temperatureType']);
 
